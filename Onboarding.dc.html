@@ -564,20 +564,7 @@ class Component extends DCLogic {
 }
 </script>
 <script>
-(function(){
-var busy=false;
-function fit(){
-  if(busy)return;busy=true;
-  var r=document.documentElement,base=Math.min(1.8,Math.min(innerWidth/1440,innerHeight/860)),z=Math.max(.7,base),m=document.querySelector('main');
-  r.style.setProperty('--z',z);
-  while(m&&z>.7&&m.scrollHeight>m.clientHeight+1){z=Math.max(.7,z-.03);r.style.setProperty('--z',z)}
-  busy=false;
-}
-var t;function soon(){cancelAnimationFrame(t);t=requestAnimationFrame(fit)}
-fit();addEventListener('resize',soon);
-new MutationObserver(soon).observe(document.body,{childList:true,subtree:true});
-setTimeout(fit,300);
-})();
+(function(){function f(){var z=Math.min(1.8,Math.max(.7,Math.min(innerWidth/1440,innerHeight/860)));document.documentElement.style.setProperty('--z',z)}f();addEventListener('resize',f)})();
 </script>
 </body>
 </html>
