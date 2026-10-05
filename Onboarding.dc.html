@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Editor onboarding</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&amp;family=Source+Serif+4:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Source Sans 3','Segoe UI',system-ui,sans-serif;color:#1B1F24;background:#F4F5F7}
+a{color:#1D3FCF}a:hover{color:#142C94}
+button{font-family:inherit}
+textarea{font-family:inherit}
+.scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:#C9CED6;border-radius:8px}
+</style>
+</helmet>
+
+<div style="position: relative; width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5F7; font-family: 'Source Sans 3','Segoe UI',system-ui,sans-serif; color: #1B1F24">
+
+  <header style="height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E3E6EB">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <div style="width: 32px; height: 32px; border-radius: 7px; background: #1C6A85; display: flex; align-items: center; justify-content: center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M9 11h7M9 15h7M9 7h4"></path></svg>
+      </div>
+      <div style="line-height: 1.05">
+        <div style="font-weight: 700; font-size: 14px; letter-spacing: 0.02em">EDITORIAL</div>
+        <div style="font-size: 13px; letter-spacing: 0.04em; color: #3A424C">CENTRAL</div>
+      </div>
+      <span style="margin-left: 14px; font-size: 13px; font-weight: 600; color: #3A424C; background: #EEF1F5; border-radius: 999px; padding: 3px 10px">Setup</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 6px 8px 6px 14px; border: 1px solid #E3E6EB; border-radius: 8px">
+      <div style="font-weight: 700; font-size: 15px; letter-spacing: 0.06em">ABC PRESS</div>
+      <div style="width: 32px; height: 32px; border-radius: 50%; background: #17804F; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">ED</div>
+    </div>
+  </header>
+
+  <div style="flex-grow: 1; min-height: 0; display: flex">
+
+    <!-- Left rail: stepper -->
+    <aside aria-label="Setup steps" style="width: 300px; flex-shrink: 0; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E3E6EB; padding: 28px 20px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 4px; padding: 0 8px">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #5B6470">Setting up</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; font-weight: 600; line-height: 1.25">ABC Journal of Inorganic Chemistry</div>
+      </div>
+      <nav style="display: flex; flex-direction: column; gap: 4px">
+        <sc-for list="{{steps}}" as="st" hint-placeholder-count="5">
+          <button onClick="{{st.go}}" aria-current="{{st.current}}" style="{{st.rowStyle}}">
+            <span style="{{st.circleStyle}}">
+              <sc-if value="{{st.done}}" hint-placeholder-val="{{false}}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"></path></svg>
+              </sc-if>
+              <sc-if value="{{st.notDone}}" hint-placeholder-val="{{true}}">{{st.n}}</sc-if>
+            </span>
+            <span style="display: flex; flex-direction: column; gap: 1px; text-align: left">
+              <span style="{{st.labelStyle}}">{{st.label}}</span>
+              <span style="font-size: 12px; color: #5B6470">{{st.sub}}</span>
+            </span>
+          </button>
+        </sc-for>
+      </nav>
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding: 14px; background: #F7F8FA; border: 1px solid #E3E6EB; border-radius: 8px; font-size: 13px; line-height: 1.45; color: #3A424C">
+        <div>You’re setting this up <strong style="color: #1B1F24">on behalf of the journal</strong>, so these settings apply to everyone who handles it. Each editor chooses their own view separately, on their first visit.</div>
+        <a href="MyTasks.dc.html" style="font-weight: 600; text-decoration: none">Finish later and go to My Tasks</a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column">
+      <main class="scroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding: 36px 40px 40px 40px; box-sizing: border-box">
+
+        <!-- STEP 1: WELCOME -->
+        <sc-if value="{{is0}}" hint-placeholder-val="{{true}}">
+          <div style="max-width: 920px; display: flex; flex-direction: column; gap: 24px">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #1C6A85">Welcome to Editorial Central</div>
+              <h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 34px; font-weight: 600; line-height: 1.2">Before your first manuscript, a quick look at how things work</h1>
+              <p style="margin: 0; font-size: 17px; line-height: 1.5; color: #3A424C; max-width: 760px">Editorial Central brings together evidence on scope, novelty, methodology and significance for each submission, to support the judgement you already bring.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">The decisions stay with you</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">Suggestions are there to inform, and nothing moves a manuscript until you act.</div></div>
+              </div>
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">Reasons alongside every signal</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">Each signal links to the passage or source it came from, so you can see how it was reached.</div></div>
+              </div>
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-3 7h6zM17 8l-3 7h6z"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">Room for uncertainty</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">When fit is unclear, you’ll see “Partial fit” with the reasons rather than a firm call. Missing evidence isn’t treated as a weakness in the paper.</div></div>
+              </div>
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10H7z"></path><path d="M3 12h4M17 12h4"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">Clear labels</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">The authors’ own words and AI-written text are marked, and you can choose how much of the AI interpretation you’d like to see.</div><div style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 600; color: #17603C; background: #E6F4EC; border-radius: 999px; padding: 2px 8px">Verbatim</span><span style="font-size: 11px; font-weight: 600; color: #5B2DB3; background: #F1EBFD; border-radius: 999px; padding: 2px 8px">AI-written</span></div></div>
+              </div>
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">Manuscripts kept private</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">Manuscript text isn’t sent to outside search services or compared with other publishers’ content.</div></div>
+              </div>
+              <div style="display: flex; gap: 14px; background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #E8EDFD; color: #1D3FCF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 6px"><div style="font-size: 16px; font-weight: 700">Your disagreement counts</div><div style="font-size: 14px; line-height: 1.5; color: #3A424C">When you overrule a signal, it could be used to refine your journal’s settings.</div></div>
+              </div>
+            </div>
+
+            <section aria-label="What you can set up" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; align-items: baseline; justify-content: space-between">
+                <h2 style="margin: 0; font-size: 17px">A few things to set up for your journal</h2>
+                <span style="font-size: 13px; color: #5B6470">About 5 minutes · skip anything · everything can be changed later</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+                <div style="border: 1px solid #E3E6EB; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85">Journal · shared</span><span style="font-size: 15px; font-weight: 700">Your journal</span><span style="font-size: 13px; line-height: 1.45; color: #3A424C">Your scope, the article types to check, subfields and sister journals, plus an optional note on how things work in practice.</span></div>
+                <div style="border: 1px solid #E3E6EB; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85">Journal · shared</span><span style="font-size: 15px; font-weight: 700">What counts here</span><span style="font-size: 13px; line-height: 1.45; color: #3A424C">Your sense of what makes a strong contribution for your journal.</span></div>
+                <div style="border: 1px dashed #C9CED6; background: #F7F8FA; border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #5B6470">Separately, for each editor</span><span style="font-size: 15px; font-weight: 700">Their own view</span><span style="font-size: 13px; line-height: 1.45; color: #3A424C">A short guided tour on their first visit, where each editor can choose how things appear.</span></div>
+              </div>
+            </section>
+          </div>
+        </sc-if>
+
+        <!-- STEP 2: YOUR JOURNAL -->
+        <sc-if value="{{is1}}" hint-placeholder-val="{{false}}">
+          <div style="max-width: 920px; display: flex; flex-direction: column; gap: 18px">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85; background: #E7F1F4; border-radius: 999px; padding: 3px 10px">Journal · shared</span><span style="font-size: 13px; color: #5B6470">{{confirmedText}}</span></div>
+              <h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 600; line-height: 1.2">Here’s how we’ve understood your journal</h1>
+              <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3A424C; max-width: 760px">We put this together from your journal’s website. Have a quick look at the subfields and sister journals, and choose which article types should be checked.</p>
+            </div>
+
+            <section aria-label="Aims and scope" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+                <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 16px">Aims &amp; Scope</h2><span style="font-size: 13px; color: #5B6470">Used mainly for scope fit</span></div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #3A424C; background: #EEF1F5; border-radius: 999px; padding: 4px 10px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>From your journal’s website</span>
+              </div>
+              <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #1B1F24; background: #F7F8FA; border-radius: 8px; padding: 12px 14px">ABC Journal of Inorganic Chemistry publishes original research on the synthesis, structure, reactivity and properties of inorganic and organometallic compounds, including coordination chemistry, catalysis by metal complexes, and inorganic materials with molecular-level insight.</p>
+            </section>
+
+            <section aria-label="Article types to check" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 16px">Which article types should go through these checks?</h2><span style="font-size: 13px; color: #5B6470; line-height: 1.4">Special sections often follow a different workflow, such as solicited content handled by section editors, so they start switched off.</span></div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px">
+                <sc-for list="{{typeRows}}" as="ty" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0; border-top: 1px solid #EEF0F3">
+                    <span style="font-size: 15px">{{ty.label}}</span>
+                    <button role="switch" aria-checked="{{ty.on}}" aria-label="{{ty.label}}" onClick="{{ty.toggle}}" style="display: flex; align-items: center; gap: 8px; min-height: 40px; border: none; background: transparent; cursor: pointer; font-size: 13px; color: #3A424C"><span style="{{ty.track}}"><span style="{{ty.knob}}"></span></span>{{ty.state}}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+              <section aria-label="Subfields" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+                  <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 16px">Subfields</h2><span style="font-size: 13px; color: #5B6470; line-height: 1.4">Helps match manuscripts to the areas you cover</span></div>
+                  <button onClick="{{c.sub.toggle}}" aria-pressed="{{c.sub.done}}" style="{{c.sub.style}}">{{c.sub.label}}</button>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <span style="font-size: 13px; font-weight: 600; background: #EEF1F5; border-radius: 999px; padding: 5px 12px">Coordination chemistry</span>
+                  <span style="font-size: 13px; font-weight: 600; background: #EEF1F5; border-radius: 999px; padding: 5px 12px">Organometallic synthesis</span>
+                  <span style="font-size: 13px; font-weight: 600; background: #EEF1F5; border-radius: 999px; padding: 5px 12px">Ruthenium(II) complexes</span>
+                  <span style="font-size: 13px; font-weight: 600; background: #EEF1F5; border-radius: 999px; padding: 5px 12px">Spin-crossover materials</span>
+                  <span style="font-size: 13px; font-weight: 600; background: #EEF1F5; border-radius: 999px; padding: 5px 12px">Luminescent complexes</span>
+                  <button style="min-height: 32px; font-size: 13px; font-weight: 600; color: #1D3FCF; background: transparent; border: 1px dashed #BCCDF3; border-radius: 999px; padding: 0 12px; cursor: pointer">+ Add subfield</button>
+                </div>
+              </section>
+
+              <section aria-label="Sister journals" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+                  <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 16px">Sister journals</h2><span style="font-size: 13px; color: #5B6470; line-height: 1.4">Used only when suggesting a possible transfer</span></div>
+                  <button onClick="{{c.sis.toggle}}" aria-pressed="{{c.sis.done}}" style="{{c.sis.style}}">{{c.sis.label}}</button>
+                </div>
+                <sc-for list="{{sisters}}" as="sj" hint-placeholder-count="2">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid #EEF0F3">
+                    <span style="font-size: 15px; font-weight: 600">{{sj.name}}</span>
+                    <button role="switch" aria-checked="{{sj.on}}" aria-label="{{sj.aria}}" onClick="{{sj.toggle}}" style="display: flex; align-items: center; gap: 8px; min-height: 40px; border: none; background: transparent; cursor: pointer; font-size: 13px; color: #3A424C">
+                      <span style="{{sj.track}}"><span style="{{sj.knob}}"></span></span>{{sj.state}}
+                    </button>
+                  </div>
+                </sc-for>
+              </section>
+            </div>
+
+          </div>
+        </sc-if>
+
+        <!-- STEP 3: IN PRACTICE (OPTIONAL) -->
+        <sc-if value="{{is2}}" hint-placeholder-val="{{false}}">
+          <div style="max-width: 920px; display: flex; flex-direction: column; gap: 18px">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85; background: #E7F1F4; border-radius: 999px; padding: 3px 10px">Journal · shared</span><span style="font-size: 13px; color: #5B6470">Optional</span></div>
+              <h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 600; line-height: 1.2">How your journal works in practice</h1>
+              <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3A424C; max-width: 760px">Your Aims &amp; Scope stays as published. If there’s anything the written statement doesn’t capture, you can add it here. You can also skip this and come back to it later.</p>
+            </div>
+            <section aria-label="Editorial strategy in practice" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+              <label for="practice" style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 700; line-height: 1.35">Has your editorial strategy, in practice, evolved beyond what the written Aims &amp; Scope currently capture? <span style="font-weight: 400; color: #5B6470">(optional)</span></span><span style="font-size: 13px; color: #5B6470">Anything you share here is considered in scope checks alongside the written statement.</span></label>
+              <textarea id="practice" rows="4" placeholder="e.g. Topics you’ve been welcoming more of recently, directions you’re moving away from, or kinds of work you’d like to see more of." style="font-size: 15px; line-height: 1.5; border: 1px solid #D5DAE1; border-radius: 8px; padding: 10px 12px; resize: vertical; color: #1B1F24"></textarea>
+            </section>
+          </div>
+        </sc-if>
+
+        <!-- STEP 4: WHAT COUNTS HERE -->
+        <sc-if value="{{is3}}" hint-placeholder-val="{{false}}">
+          <div style="max-width: 960px; display: flex; flex-direction: column; gap: 18px">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85; background: #E7F1F4; border-radius: 999px; padding: 3px 10px">Journal · shared</span></div>
+              <h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 600; line-height: 1.2">What does a strong contribution look like for your journal?</h1>
+              <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3A424C; max-width: 780px">The AI interpretation describes how a manuscript relates to what you set here; the judgement remains yours. We’ve filled in suggested starting points, so please adjust anything that doesn’t fit.</p>
+            </div>
+
+            <section aria-label="Novelty expectations" style="background: #FFFFFF; border: 1px solid #CDBEF3; border-radius: 10px; overflow: hidden">
+              <div style="background: #EFE9FD; padding: 14px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px">
+                <h2 style="margin: 0; font-size: 16px">Novelty: which kinds tend to be enough for your journal?</h2>
+                <span style="font-size: 13px; color: #3A424C">Uses the same categories that label novelty claims</span>
+              </div>
+              <div style="display: flex; flex-direction: column">
+                <sc-for list="{{noveltyRows}}" as="row" hint-placeholder-count="8">
+                  <div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 16px; align-items: center; padding: 10px 18px; border-top: 1px solid #EEF0F3">
+                    <div style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">{{row.name}}</span><span style="font-size: 13px; color: #5B6470">{{row.desc}}</span></div>
+                    <div role="group" aria-label="{{row.name}}" style="display: flex; gap: 6px; justify-content: flex-end">
+                      <sc-for list="{{row.opts}}" as="opt" hint-placeholder-count="3">
+                        <button onClick="{{opt.pick}}" aria-pressed="{{opt.pressed}}" style="{{opt.style}}">{{opt.label}}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+
+            <section aria-label="Methodology expectations" style="background: #FFFFFF; border: 1px solid #BCCDF3; border-radius: 10px; overflow: hidden">
+              <div style="background: #E6EEFD; padding: 14px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px">
+                <h2 style="margin: 0; font-size: 16px">Methodology: what would you usually expect a submission to report?</h2>
+                <span style="font-size: 13px; color: #3A424C">Items not found are shown as “not located” rather than as gaps</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; padding: 6px 18px 12px 18px">
+                <sc-for list="{{methodRows}}" as="m" hint-placeholder-count="6">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #EEF0F3">
+                    <span style="font-size: 14px">{{m.label}}</span>
+                    <button role="switch" aria-checked="{{m.on}}" aria-label="{{m.label}}" onClick="{{m.toggle}}" style="min-width: 44px; min-height: 40px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: flex-end"><span style="{{m.track}}"><span style="{{m.knob}}"></span></span></button>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="padding: 0 18px 14px 18px"><button style="min-height: 36px; font-size: 13px; font-weight: 600; color: #1D3FCF; background: transparent; border: 1px dashed #BCCDF3; border-radius: 999px; padding: 0 12px; cursor: pointer">+ Add a reporting expectation</button></div>
+            </section>
+
+          </div>
+        </sc-if>
+
+        <!-- STEP 5: READY -->
+        <sc-if value="{{is4}}" hint-placeholder-val="{{false}}">
+          <div style="max-width: 920px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <span style="width: 48px; height: 48px; border-radius: 50%; background: #E6F4EC; color: #17603C; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"></path></svg></span>
+              <h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 30px; font-weight: 600; line-height: 1.2">You’re all set. Your first manuscript is ready when you are.</h1>
+              <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3A424C">You can revisit any of these in Settings, and nothing here affects manuscripts already in progress.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+              <div style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85">Your journal</span><span style="font-size: 15px; font-weight: 700">{{sum.journal}}</span><span style="font-size: 13px; color: #5B6470; line-height: 1.4">{{sum.journalSub}}</span></div>
+              <div style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #1C6A85">What counts here</span><span style="font-size: 15px; font-weight: 700">{{sum.counts}}</span><span style="font-size: 13px; color: #5B6470; line-height: 1.4">{{sum.countsSub}}</span></div>
+              <div style="background: #F7F8FA; border: 1px dashed #C9CED6; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #5B6470">Each editor’s view</span><span style="font-size: 15px; font-weight: 700">Chosen by each editor</span><span style="font-size: 13px; color: #5B6470; line-height: 1.4">On their first visit, a short guided tour lets each editor choose how things appear for them.</span></div>
+            </div>
+
+            <section aria-label="One thing to try" style="background: #FFFFFF; border: 1px solid #E3E6EB; border-radius: 10px; padding: 18px; display: flex; gap: 18px; align-items: center">
+              <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px">
+                <h2 style="margin: 0; font-size: 16px">A small tip for your first manuscript</h2>
+                <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #3A424C">If a signal or AI interpretation doesn’t match your view, you can press <strong>Disagree</strong> and add a line on why. It’s kept with the decision record and could help refine your journal’s settings.</p>
+              </div>
+              <span aria-hidden="true" style="flex-shrink: 0; display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border: 1px solid #D5DAE1; border-radius: 6px; font-size: 13px; font-weight: 600; color: #3A424C; background: #FFFFFF">Disagree</span>
+            </section>
+
+          </div>
+        </sc-if>
+      </main>
+
+      <!-- Footer -->
+      <footer style="height: 76px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; background: #FFFFFF; border-top: 1px solid #E3E6EB">
+        <button onClick="{{back}}" disabled="{{backDisabled}}" style="{{backStyle}}">‹ Back</button>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span style="font-size: 13px; color: #5B6470">{{stepCount}}</span>
+          <sc-if value="{{showSkip}}" hint-placeholder-val="{{false}}">
+            <button onClick="{{next}}" style="min-height: 44px; padding: 0 16px; border: none; background: transparent; border-radius: 8px; font-size: 15px; font-weight: 600; color: #3A424C; cursor: pointer">Skip for now</button>
+          </sc-if>
+          <sc-if value="{{notLast}}" hint-placeholder-val="{{true}}">
+            <button onClick="{{next}}" style="min-height: 44px; padding: 0 22px; border: none; background: #1D3FCF; color: #FFFFFF; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer">{{nextLabel}}</button>
+          </sc-if>
+          <sc-if value="{{isLast}}" hint-placeholder-val="{{false}}">
+            <a href="MyTasks.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; background: #1D3FCF; color: #FFFFFF; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none">Go to My Tasks ›</a>
+          </sc-if>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <!-- Feedback tab (visual only on this board) -->
+  <button aria-label="Give feedback" title="Give feedback" style="position: absolute; right: 0; bottom: 120px; z-index: 30; writing-mode: vertical-rl; border: 1px solid #D5DAE1; border-right: none; background: #FFFFFF; color: #1B1F24; border-radius: 10px 0 0 10px; padding: 16px 10px; font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 0.01em; cursor: pointer; box-shadow: -4px 4px 14px rgba(20, 28, 40, 0.14)">Critique us!</button>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  s() {
+    var d = {
+      step: 0,
+      conf: { aims: false, cat: false, sub: false, sis: false, toc: false },
+      cat: 'hard',
+      sisters: { cl: true, mt: false },
+      novelty: { problem: 'yes', method: 'yes', methodology: 'yes', data: 'case', result: 'yes', combination: 'case', context: 'case', theory: 'yes' },
+      method: { conditions: true, controls: true, charac: true, scope: true, repro: true, data: false },
+      scopus: false, wos: false, pre: true, auth: false,
+      types: { orig: true, rev: true, cases: true, special: false },
+      views: { novelty: 'fold', methodology: 'fold', significance: 'fold' },
+      prev: 'novelty', revealed: false, first: 'scope'
+    };
+    var st = this.state || {};
+    var out = {};
+    for (var k in d) out[k] = (st[k] === undefined) ? d[k] : st[k];
+    return out;
+  }
+  set(patch) { this.setState(patch); }
+
+  trackStyle(on) {
+    return 'display: inline-block; width: 40px; height: 24px; border-radius: 999px; box-sizing: border-box; padding: 3px; background: ' + (on ? '#1D3FCF' : '#C9CED6') + '; transition: background 0.15s';
+  }
+  knobStyle(on) {
+    return 'display: block; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.25); margin-left: ' + (on ? '16px' : '0px') + '; transition: margin-left 0.15s';
+  }
+  pillStyle(on) {
+    return on
+      ? 'min-height: 40px; padding: 0 14px; border: 1px solid #1D3FCF; background: #E8EDFD; color: #142C94; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer'
+      : 'min-height: 40px; padding: 0 14px; border: 1px solid #D5DAE1; background: #FFFFFF; color: #3A424C; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer';
+  }
+
+  renderVals() {
+    var self = this;
+    var s = this.s();
+    var step = s.step;
+
+    var stepDefs = [
+      { label: 'Welcome', sub: 'How this works' },
+      { label: 'Your journal', sub: 'Journal · shared' },
+      { label: 'In practice', sub: 'Optional · shared' },
+      { label: 'What counts here', sub: 'Journal · shared' },
+      { label: 'Ready', sub: 'First manuscript' }
+    ];
+    var steps = stepDefs.map(function (d, i) {
+      var done = i < step, cur = i === step;
+      return {
+        n: String(i + 1), label: d.label, sub: d.sub, done: done, notDone: !done,
+        current: cur ? 'step' : undefined,
+        go: function () { self.set({ step: i }); },
+        rowStyle: 'display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 8px; border: none; border-radius: 8px; cursor: pointer; text-align: left; background: ' + (cur ? '#E8EDFD' : 'transparent'),
+        circleStyle: 'width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; box-sizing: border-box; ' +
+          (done ? 'background: #17603C; color: #FFFFFF;' : cur ? 'background: #1D3FCF; color: #FFFFFF;' : 'background: #FFFFFF; color: #5B6470; border: 1.5px solid #C9CED6;'),
+        labelStyle: 'font-size: 15px; font-weight: ' + (cur ? '700' : '600') + '; color: ' + (cur ? '#142C94' : '#1B1F24')
+      };
+    });
+
+    // Journal confirmations
+    var c = {};
+    ['sub', 'sis'].forEach(function (k) {
+      var on = !!s.conf[k];
+      c[k] = {
+        done: on,
+        label: on ? '✓ Looks right' : 'Looks right?',
+        toggle: function () { var n = Object.assign({}, s.conf); n[k] = !on; self.set({ conf: n }); },
+        style: on
+          ? 'min-height: 40px; padding: 0 14px; border: 1px solid #B9DEC9; background: #E6F4EC; color: #17603C; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; flex-shrink: 0'
+          : 'min-height: 40px; padding: 0 14px; border: 1px solid #BCCDF3; background: #FFFFFF; color: #1D3FCF; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0'
+      };
+    });
+    var typeRows = [
+      { id: 'orig', label: 'Original research' }, { id: 'rev', label: 'Reviews' },
+      { id: 'cases', label: 'Case reports' }, { id: 'special', label: 'Special sections' }
+    ].map(function (x) {
+      var on = !!s.types[x.id];
+      return { label: x.label, on: on, state: on ? 'Checked' : 'Not checked', track: self.trackStyle(on), knob: self.knobStyle(on),
+        toggle: function () { var n = Object.assign({}, s.types); n[x.id] = !on; self.set({ types: n }); } };
+    });
+    var nTypes = ['orig', 'rev', 'cases', 'special'].filter(function (k) { return s.types[k]; }).length;
+    var nConf = ['sub', 'sis'].filter(function (k) { return s.conf[k]; }).length;
+
+    var categories = [
+      { id: 'life', label: 'Life sciences' }, { id: 'hard', label: 'Hard sciences' },
+      { id: 'social', label: 'Social sciences' }, { id: 'hum', label: 'Humanities' }
+    ].map(function (x) {
+      var on = s.cat === x.id;
+      return { label: x.label, pressed: on, style: self.pillStyle(on), pick: function () { self.set({ cat: x.id }); } };
+    });
+
+    var sisters = [{ id: 'cl', name: 'ABC Catalysis Letters' }, { id: 'mt', name: 'ABC Materials Today' }].map(function (x) {
+      var on = !!s.sisters[x.id];
+      return {
+        name: x.name, on: on, aria: 'Suggest transfers to ' + x.name, state: on ? 'Included in transfer suggestions' : 'Not included',
+        track: self.trackStyle(on), knob: self.knobStyle(on),
+        toggle: function () { var n = Object.assign({}, s.sisters); n[x.id] = !on; self.set({ sisters: n }); }
+      };
+    });
+
+    // Novelty expectations
+    var nov = [
+      { id: 'problem', name: 'Problem novelty', desc: 'A previously unformulated or unresolved question' },
+      { id: 'method', name: 'Method novelty', desc: 'A new or meaningfully changed method or technique' },
+      { id: 'methodology', name: 'Methodology novelty', desc: 'A new overall research design or workflow' },
+      { id: 'data', name: 'Data / material novelty', desc: 'A new dataset, material, cohort or resource' },
+      { id: 'result', name: 'Result novelty', desc: 'A previously unreported finding' },
+      { id: 'combination', name: 'Combination novelty', desc: 'Integrating existing methods or ideas' },
+      { id: 'context', name: 'Context novelty', desc: 'An established method in a new setting' },
+      { id: 'theory', name: 'Theory / hypothesis novelty', desc: 'A new explanation, mechanism or framework' }
+    ];
+    var levels = [{ id: 'yes', label: 'Usually enough' }, { id: 'case', label: 'Case by case' }, { id: 'rare', label: 'Rarely enough' }];
+    var noveltyRows = nov.map(function (r) {
+      return {
+        name: r.name, desc: r.desc,
+        opts: levels.map(function (l) {
+          var on = s.novelty[r.id] === l.id;
+          return {
+            label: l.label, pressed: on,
+            style: on
+              ? 'min-height: 40px; padding: 0 12px; border: 1px solid #5B2DB3; background: #F1EBFD; color: #3F1D85; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer'
+              : 'min-height: 40px; padding: 0 12px; border: 1px solid #D5DAE1; background: #FFFFFF; color: #3A424C; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer',
+            pick: function () { var n = Object.assign({}, s.novelty); n[r.id] = l.id; self.set({ novelty: n }); }
+          };
+        })
+      };
+    });
+
+    var methodDefs = [
+      { id: 'conditions', label: 'Reaction conditions and yields reported' },
+      { id: 'controls', label: 'Control experiments' },
+      { id: 'charac', label: 'Characterisation data for new compounds' },
+      { id: 'scope', label: 'Substrate scope and stated limitations' },
+      { id: 'repro', label: 'Enough detail to reproduce' },
+      { id: 'data', label: 'Data availability statement' }
+    ];
+    var methodRows = methodDefs.map(function (m) {
+      var on = !!s.method[m.id];
+      return { label: m.label, on: on, track: self.trackStyle(on), knob: self.knobStyle(on),
+        toggle: function () { var n = Object.assign({}, s.method); n[m.id] = !on; self.set({ method: n }); } };
+    });
+
+    function srcBtn(on, key) {
+      return {
+        label: on ? '✓ Connected' : 'Connect with licence',
+        style: on
+          ? 'justify-self: end; min-height: 40px; padding: 0 14px; border: 1px solid #B9DEC9; background: #E6F4EC; color: #17603C; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer'
+          : 'justify-self: end; min-height: 40px; padding: 0 14px; border: 1px solid #D5DAE1; background: #FFFFFF; color: #1D3FCF; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer',
+        toggle: function () { var p = {}; p[key] = !on; self.set(p); }
+      };
+    }
+    var src = { scopus: srcBtn(s.scopus, 'scopus'), wos: srcBtn(s.wos, 'wos') };
+    function sw(on, key) {
+      return { on: on, state: on ? 'On' : 'Off', track: self.trackStyle(on), knob: self.knobStyle(on),
+        toggle: function () { var p = {}; p[key] = !on; self.set(p); } };
+    }
+    var swv = { pre: sw(s.pre, 'pre'), auth: sw(s.auth, 'auth') };
+
+    // Your view
+    var areas = {
+      novelty: { name: 'Novelty', soft: '#EFE9FD', line: '#CDBEF3' },
+      methodology: { name: 'Methodology', soft: '#E6EEFD', line: '#BCCDF3' },
+      significance: { name: 'Significance', soft: '#E4F4EA', line: '#B5DDC4' }
+    };
+    var modes = [
+      { id: 'fold', title: 'Evidence first', tag: 'Suggested', desc: 'Folded until you open it, so you can form your view first.' },
+      { id: 'show', title: 'Alongside evidence', tag: '', desc: 'Shown under the evidence straight away.' },
+      { id: 'off', title: 'Off', tag: '', desc: 'Evidence only. You can turn it on whenever you like.' }
+    ];
+    var modeName = { fold: 'Evidence first', show: 'Alongside evidence', off: 'Off' };
+    var viewCards = ['novelty', 'methodology', 'significance'].map(function (k) {
+      var a = areas[k], sel = s.prev === k;
+      return {
+        name: a.name,
+        hint: sel ? 'Showing in preview' : 'Click to preview',
+        cardStyle: 'background: #FFFFFF; border: ' + (sel ? '2px solid ' + a.line : '1px solid #E3E6EB') + '; border-radius: 10px; overflow: hidden',
+        headStyle: 'display: flex; align-items: baseline; justify-content: space-between; padding: 10px 16px; background: ' + a.soft,
+        opts: modes.map(function (m) {
+          var on = s.views[k] === m.id;
+          return {
+            title: m.title, tag: m.tag, desc: m.desc, checked: on,
+            tagStyle: m.tag ? 'margin-left: 6px; font-size: 11px; font-weight: 700; color: #17603C; background: #E6F4EC; border-radius: 999px; padding: 1px 7px' : 'display: none',
+            rowStyle: 'display: flex; align-items: flex-start; gap: 12px; width: 100%; min-height: 48px; padding: 8px; border: none; border-radius: 8px; cursor: pointer; background: ' + (on ? '#F7F8FA' : 'transparent'),
+            ring: 'width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; border-radius: 50%; box-sizing: border-box; border: 2px solid ' + (on ? '#1D3FCF' : '#9AA1AB') + '; display: flex; align-items: center; justify-content: center',
+            dot: 'width: 10px; height: 10px; border-radius: 50%; background: ' + (on ? '#1D3FCF' : 'transparent'),
+            pick: function () { var n = Object.assign({}, s.views); n[k] = m.id; self.set({ views: n, prev: k, revealed: false }); }
+          };
+        })
+      };
+    });
+    var firstViews = [{ id: 'scope', label: 'Scope' }, { id: 'snapshot', label: 'Manuscript Snapshot' }, { id: 'evidence', label: 'Evidence Navigator' }].map(function (f) {
+      var on = s.first === f.id;
+      return { label: f.label, checked: on, style: self.pillStyle(on), pick: function () { self.set({ first: f.id }); } };
+    });
+    var previewTabs = ['novelty', 'methodology', 'significance'].map(function (k) {
+      var on = s.prev === k;
+      return { name: areas[k].name, selected: on,
+        style: 'min-height: 32px; padding: 0 10px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: ' + (on ? '700' : '500') + '; background: ' + (on ? '#FFFFFF' : 'transparent') + '; color: ' + (on ? '#142C94' : '#3A424C') + '; box-shadow: ' + (on ? '0 0 0 1px #D5DAE1' : 'none'),
+        pick: function () { self.set({ prev: k, revealed: false }); } };
+    });
+
+    var cutoff = 'Searched: TNQ Literature Index' + (s.scopus ? ', Scopus' : '') + ' · published before 18 May 2026 · preprints ' + (s.pre ? 'included' : 'excluded');
+    var novLevel = { yes: 'usually enough', case: 'judged case by case', rare: 'rarely enough' }[s.novelty.method];
+    var content = {
+      novelty: {
+        evMeta: 'Results',
+        evidence: 'Thus, the compound, [(η6-p-cymene)Ru(bpm)Cl]+[PF6]−(1) has been synthesized from the reaction of […]',
+        ai: 'The authors make one Method novelty claim: a cationic Ru(II) bpm complex used as the N-alkylation catalyst. Of the two closest prior works found, one is cited and one is not. This journal marks Method novelty as ' + novLevel + '. Worth checking: how the uncited work differs.',
+        basis: 'Based on: novelty claim N1 · prior work 1–2. Finding no similar work isn’t taken as proof of novelty.'
+      },
+      methodology: {
+        evMeta: 'Results · 1 of 5 passages',
+        evidence: 'Increasing the catalyst loading to 1.5 mol% markedly improved the conversion (95%) (Entry 3, Table 1).',
+        ai: 'Against this journal’s expectations, the manuscript reports reaction conditions and yields, catalyst-loading and solvent screens, control reactions, and a substrate scope with a stated limitation (aliphatic amides do not react). Not located in the main text: a data availability statement.',
+        basis: 'Based on: methodology passages M1–M5 · your journal’s reporting expectations. “Not located” may mean it is in the SI.'
+      },
+      significance: {
+        evMeta: 'Results',
+        evidence: 'The methodology was successfully applied to the synthesis of the antiemetic drug Tigan.',
+        ai: 'The authors’ significance claim is an application: a synthesis of the antiemetic drug Tigan. The Results report this synthesis (Scheme 3), so the claim is supported within the manuscript. Whether it matters to your readership is your call.',
+        basis: 'Based on: significance claim S1 · Scheme 3.'
+      }
+    };
+    var mode = s.views[s.prev];
+    var ct = content[s.prev];
+    var pv = {
+      title: areas[s.prev].name,
+      modeText: 'Your setting: ' + modeName[mode],
+      headStyle: 'display: flex; align-items: baseline; justify-content: space-between; padding: 10px 16px; background: ' + areas[s.prev].soft + '; border-bottom: 1px solid ' + areas[s.prev].line,
+      evMeta: ct.evMeta, evidence: ct.evidence, ai: ct.ai, basis: ct.basis,
+      isNovelty: s.prev === 'novelty', searched: cutoff,
+      folded: mode === 'fold' && !s.revealed,
+      open: mode === 'show' || (mode === 'fold' && s.revealed),
+      off: mode === 'off'
+    };
+
+    // Summary
+    var nConn = 1 + (s.scopus ? 1 : 0) + (s.wos ? 1 : 0);
+    var catLabel = { life: 'Life sciences', hard: 'Hard sciences', social: 'Social sciences', hum: 'Humanities' }[s.cat];
+    var sum = {
+      journal: nConf + ' of 2 sections reviewed',
+      journalSub: nConf < 2 ? 'Any section you haven’t reviewed uses our draft profile for now.' : 'Scope checks will use the profile you reviewed.',
+      counts: nTypes + (nTypes === 1 ? ' article type' : ' article types') + ' to check',
+      countsSub: 'Novelty and methodology expectations noted.',
+      view: 'Opens at ' + { scope: 'Scope', snapshot: 'Manuscript Snapshot', evidence: 'Evidence Navigator' }[s.first],
+      viewSub: 'Novelty: ' + modeName[s.views.novelty] + '\nMethodology: ' + modeName[s.views.methodology] + '\nSignificance: ' + modeName[s.views.significance]
+    };
+
+    var nextLabels = ['Get started', 'Continue', 'Continue', 'Finish setup', ''];
+    return {
+      steps: steps, c: c, categories: categories, sisters: sisters,
+      confirmedText: nConf + ' of 2 reviewed', typeRows: typeRows,
+      noveltyRows: noveltyRows, methodRows: methodRows, src: src, sw: swv,
+      viewCards: viewCards, firstViews: firstViews, previewTabs: previewTabs, pv: pv,
+      reveal: function () { self.set({ revealed: true }); },
+      sum: sum,
+      is0: step === 0, is1: step === 1, is2: step === 2, is3: step === 3, is4: step === 4,
+      isLast: step === 4, notLast: step !== 4, showSkip: step > 0 && step < 4,
+      nextLabel: nextLabels[step],
+      stepCount: 'Step ' + (step + 1) + ' of 5',
+      next: function () { self.set({ step: Math.min(4, step + 1) }); },
+      back: function () { self.set({ step: Math.max(0, step - 1) }); },
+      backDisabled: step === 0,
+      backStyle: 'min-height: 44px; padding: 0 16px; border: 1px solid #D5DAE1; background: #FFFFFF; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: ' + (step === 0 ? 'default' : 'pointer') + '; color: ' + (step === 0 ? '#9AA1AB' : '#1B1F24') + '; opacity: ' + (step === 0 ? '0.6' : '1')
+    };
+  }
+}
+</script>
+</body>
+</html>

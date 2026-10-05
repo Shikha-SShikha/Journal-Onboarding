@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: journal-onboarding
+    runtime: static
+    rootDir: .
+    staticPublishPath: .
+    buildCommand: echo "static site"
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
